@@ -1,0 +1,17 @@
+<!-- templates/home.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Processing App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Welcome to the Image Processing App</h1>
+    <p><a href="{{ url_for('upload') }}">Upload an image</a></p>
+</body>
+</html><!-- index.html -->
+<form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    {{ form.image.label }} {{ form.image() }}
+    <input type="submit" value="Upload">
+</form>

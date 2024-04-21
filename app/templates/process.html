@@ -1,0 +1,23 @@
+<!-- templates/process.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Process Image</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Process Image</h1>
+    <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Uploaded image">
+    <form method="POST">
+        <select name="operation">
+            <option value="canny">Canny edge detection</option>
+            <option value="hough">Hough line detection</option>
+            <option value="harris">Harris corner detection</option>
+        </select>
+        <input type="submit" value="Process">
+    </form>
+    <p><a href="{{ url_for('upload') }}">Upload a different image</a></p>
+</body>
+</html>
+</body>
+</html>
