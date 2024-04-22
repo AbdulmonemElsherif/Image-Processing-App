@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=D:\men3em\image\project\myproject\venv
+set VIRTUAL_ENV=G:\HEM Spring 2023\Image\Task4new\Image-Processing-App\venv
 
 if not defined PROMPT set PROMPT=$P$G
 
