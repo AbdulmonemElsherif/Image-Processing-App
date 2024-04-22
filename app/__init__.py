@@ -13,10 +13,9 @@ class UploadForm(FlaskForm):
     image = FileField('Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Images only!')])
 app = Flask(__name__)
 app.config['SECRET_KEY'] =  secrets.token_hex(16)
-app.config['UPLOAD_FOLDER'] = 'static/uploads'
-app.config['PROCESSED_FOLDER'] = os.path.join('static', 'processed')
+app.config['UPLOAD_FOLDER'] = 'app/static/uploads'
+app.config['PROCESSED_FOLDER'] = 'app/static/processed'
 
-import os
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
