@@ -1,17 +1,24 @@
-<!-- templates/home.html -->
 <!DOCTYPE html>
 <html>
 <head>
     <title>Image Processing App</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Welcome to the Image Processing App</h1>
-    <p><a href="{{ url_for('upload') }}">Upload an image</a></p>
+    <div class="container">
+        <h1 class="my-4">Welcome to the Image Processing App</h1>
+        <h3 class="my-4">Upload an image</h3>
+        <!-- index.html -->
+        <form method="POST" enctype="multipart/form-data" class="my-4">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.image.label(class="form-label") }} 
+                {{ form.image(class="form-control-file") }}
+            </div>
+            <input type="submit" value="Upload" class="btn btn-success">
+        </form>
+    </div>
 </body>
-</html><!-- index.html -->
-<form method="POST" enctype="multipart/form-data">
-    {{ form.hidden_tag() }}
-    {{ form.image.label }} {{ form.image() }}
-    <input type="submit" value="Upload">
-</form>
+</html>

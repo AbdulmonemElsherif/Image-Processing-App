@@ -10,7 +10,7 @@ import secrets
 import time
 
 class UploadForm(FlaskForm):
-    image = FileField('Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Images only!')])
+    image = FileField('Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif','tiff'], 'Images only!')])
 app = Flask(__name__)
 app.config['SECRET_KEY'] =  secrets.token_hex(16)
 app.config['UPLOAD_FOLDER'] = 'app/static/uploads'
@@ -42,7 +42,8 @@ def upload():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('process', filename=filename))
-    return render_template('upload.html')
+    return render_template('templates/upload.html')
+
 
 @app.route('/process/<filename>', methods=['GET', 'POST'])
 def process(filename):
