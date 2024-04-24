@@ -9,6 +9,7 @@ import numpy as np
 import secrets
 import time
 from .Canny import canny_edge_detector
+
 class UploadForm(FlaskForm):
     image = FileField('Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Only .jpg, .png, .jpeg, .gif formats are allowed!')])
 app = Flask(__name__)
@@ -62,10 +63,12 @@ def process(filename):
             edges = canny_edge_detector(img, canny_sigma, canny_ksize, canny_low_threshold, canny_high_threshold)  # use the function
             cv2.imwrite(output_path, edges)
         elif operation == 'hough':
-            hough_resolution = float(request.form.get('hough_resolution'))
-            hough_lines = int(request.form.get('hough_lines'))
-            edges = cv2.Canny(img, 50, 150, apertureSize = 3)
-            lines = cv2.HoughLines(edges, hough_resolution, np.pi / 180, hough_lines)
+            rho_resolution = float(request.form.get('rho_resolution'))
+            theta_resolution = float(request.form.get('theta_resolution'))
+            num_peaks = int(request.form.get('num_peaks'))
+            edges = cv2.Canny(img, 50, 200, apertureSize = 3)
+            lines = cv2.HoughLines(edges, rho_resolution, np.pi / 180 * theta_resolution, num_peaks)
+            img_color = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)  # Convert grayscale image to color
             if lines is not None:
                 for line in lines:
                     for rho, theta in line:
@@ -77,8 +80,8 @@ def process(filename):
                         y1 = int(y0 + 1000 * (a))
                         x2 = int(x0 - 1000 * (-b))
                         y2 = int(y0 - 1000 * (a))
-                        cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
-                cv2.imwrite(output_path, img)
+                        cv2.line(img_color, (x1, y1), (x2, y2), (0, 0, 255), 2) 
+            cv2.imwrite(output_path, img_color)  # Save color image
         elif operation == 'harris':
             harris_threshold = float(request.form.get('harris_threshold'))
             img = np.float32(img)
