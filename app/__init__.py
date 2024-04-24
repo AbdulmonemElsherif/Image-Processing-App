@@ -10,7 +10,7 @@ import secrets
 import time
 
 class UploadForm(FlaskForm):
-    image = FileField('Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif','tiff'], 'Images only!')])
+    image = FileField('Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Only .jpg, .png, .jpeg, .gif formats are allowed!')])
 app = Flask(__name__)
 app.config['SECRET_KEY'] =  secrets.token_hex(16)
 app.config['UPLOAD_FOLDER'] = 'app/static/uploads'
@@ -55,32 +55,40 @@ def process(filename):
         img = cv2.imread(input_path, cv2.IMREAD_GRAYSCALE)
 
         if operation == 'canny':
-            edges = cv2.Canny(img, 100, 200)
+            canny_low_threshold = int(request.form.get('canny_low_threshold'))
+            canny_high_threshold = int(request.form.get('canny_high_threshold'))
+            canny_sigma = float(request.form.get('canny_sigma'))
+            blurred = cv2.GaussianBlur(img, (0, 0), canny_sigma)
+            edges = cv2.Canny(blurred, canny_low_threshold, canny_high_threshold)
             cv2.imwrite(output_path, edges)
         elif operation == 'hough':
+            hough_resolution = float(request.form.get('hough_resolution'))
+            hough_lines = int(request.form.get('hough_lines'))
             edges = cv2.Canny(img, 50, 150, apertureSize = 3)
-            lines = cv2.HoughLines(edges, 1, np.pi / 180, 200)
-            for rho, theta in lines[0]:
-                a = np.cos(theta)
-                b = np.sin(theta)
-                x0 = a * rho
-                y0 = b * rho
-                x1 = int(x0 + 1000 * (-b))
-                y1 = int(y0 + 1000 * (a))
-                x2 = int(x0 - 1000 * (-b))
-                y2 = int(y0 - 1000 * (a))
-                cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
-            cv2.imwrite(output_path, img)
+            lines = cv2.HoughLines(edges, hough_resolution, np.pi / 180, hough_lines)
+            if lines is not None:
+                for line in lines:
+                    for rho, theta in line:
+                        a = np.cos(theta)
+                        b = np.sin(theta)
+                        x0 = a * rho
+                        y0 = b * rho
+                        x1 = int(x0 + 1000 * (-b))
+                        y1 = int(y0 + 1000 * (a))
+                        x2 = int(x0 - 1000 * (-b))
+                        y2 = int(y0 - 1000 * (a))
+                        cv2.line(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
+                cv2.imwrite(output_path, img)
         elif operation == 'harris':
+            harris_threshold = float(request.form.get('harris_threshold'))
             img = np.float32(img)
             dst = cv2.cornerHarris(img, 2, 3, 0.04)
-            img[dst > 0.01 * dst.max()] = 255  # Changed this line
+            img[dst > harris_threshold * dst.max()] = 255
             cv2.imwrite(output_path, img)
 
         return redirect(url_for('processed', filename=filename))
 
     return render_template('process.html', filename=filename)
-
 
 @app.route('/processed/<filename>')
 def processed(filename):

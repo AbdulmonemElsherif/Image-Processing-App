@@ -11,13 +11,16 @@
         <h1 class="my-4">Welcome to the Image Processing App</h1>
         <h3 class="my-4">Upload an image</h3>
         <!-- index.html -->
-        <form method="POST" enctype="multipart/form-data" class="my-4">
+        <form method="POST" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
-            <div class="form-group">
-                {{ form.image.label(class="form-label") }} 
-                {{ form.image(class="form-control-file") }}
-            </div>
-            <input type="submit" value="Upload" class="btn btn-success">
+            <p>
+                {{ form.image.label }}<br>
+                {{ form.image(size=32) }}<br>
+                {% for error in form.image.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p><input type="submit" value="Upload"></p>
         </form>
     </div>
 </body>
