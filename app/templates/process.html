@@ -1,23 +1,77 @@
 <!-- templates/process.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Process Image</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Add your existing styles.css content here */
+        /* ... */
+        .parameter-container {
+            margin: 20px 0;
+        }
+        .parameter-label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .parameter-input {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <h1>Process Image</h1>
-    <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Uploaded image">
-    <form method="POST">
-        <select name="operation">
-            <option value="canny">Canny edge detection</option>
-            <option value="hough">Hough line detection</option>
-            <option value="harris">Harris corner detection</option>
-        </select>
-        <input type="submit" value="Process">
-    </form>
-    <p><a href="{{ url_for('upload') }}">Upload a different image</a></p>
-</body>
-</html>
+    <div class="container">
+        <h1>Process Image</h1>
+        <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Uploaded image" style="max-width: 100%;">
+        <form method="POST">
+            <div class="parameter-container">
+                <label class="parameter-label" for="operation">Select Operation:</label>
+                <select name="operation" id="operation">
+                    <option value="canny">Canny edge detection</option>
+                    <option value="hough">Hough line detection</option>
+                    <option value="harris">Harris corner detection</option>
+                </select>
+            </div>
+
+            <!-- Canny Edge Detection Parameters -->
+            <div id="canny-parameters" class="parameter-container">
+                <label class="parameter-label" for="canny-kernel-size">Kernel Size:</label>
+                <input class="parameter-input" type="range" id="canny-kernel-size" name="canny_kernel_size" min="3" max="7" step="2" value="3">
+                <label class="parameter-label" for="canny-low-threshold">Low Threshold:</label>
+                <input class="parameter-input" type="range" id="canny-low-threshold" name="canny_low_threshold" min="0" max="255" value="100">
+                <label class="parameter-label" for="canny-high-threshold">High Threshold:</label>
+                <input class="parameter-input" type="range" id="canny-high-threshold" name="canny_high_threshold" min="0" max="255" value="200">
+            </div>
+
+            <!-- Hough Line Detection Parameters -->
+            <div id="hough-parameters" class="parameter-container" style="display: none;">
+                <label class="parameter-label" for="hough-resolution">Resolution:</label>
+                <input class="parameter-input" type="range" id="hough-resolution" name="hough_resolution" min="1" max="5" value="1">
+                <label class="parameter-label" for="hough-lines">Number of Lines:</label>
+                <input class="parameter-input" type="number" id="hough-lines" name="hough_lines" min="1" max="100" value="10">
+            </div>
+
+            <!-- Harris Corner Detection Parameters -->
+            <div id="harris-parameters" class="parameter-container" style="display: none;">
+                <label class="parameter-label" for="harris-threshold">Threshold:</label>
+                <input class="parameter-input" type="range" id="harris-threshold" name="harris_threshold" min="0.01" max="0.1" step="0.01" value="0.04">
+            </div>
+
+            <input type="submit" value="Process">
+        </form>
+        <p class="back-link"><a href="{{ url_for('upload') }}">Upload a different image</a></p>
+    </div>
+
+    <script>
+        // JavaScript to toggle visibility of parameter inputs based on selected operation
+        document.getElementById('operation').addEventListener('change', function() {
+            var operation = this.value;
+            document.getElementById('canny-parameters').style.display = (operation === 'canny') ? 'block' : 'none';
+            document.getElementById('hough-parameters').style.display = (operation === 'hough') ? 'block' : 'none';
+            document.getElementById('harris-parameters').style.display = (operation === 'harris') ? 'block' : 'none';
+        });
+    </script>
 </body>
 </html>
