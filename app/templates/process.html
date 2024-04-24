@@ -34,10 +34,12 @@
             </div>
             <!-- Hough Line Detection Parameters -->
             <div id="hough-parameters" class="form-group" style="display: none;">
-                <label for="hough-resolution">Resolution: <span id="hough-resolution-value">1</span></label>
-                <input type="range" id="hough-resolution" name="hough_resolution" min="1" max="5" value="1" class="form-control-range" oninput="document.getElementById('hough-resolution-value').textContent = this.value">
-                <label for="hough-lines">Number of Lines: <span id="hough-lines-value">10</span></label>
-                <input type="number" id="hough-lines" name="hough_lines" min="1" max="100" value="10" class="form-control" oninput="document.getElementById('hough-lines-value').textContent = this.value">
+                <label for="rho-resolution">Rho Resolution: <span id="rho-resolution-value">1</span></label>
+                <input type="range" id="rho-resolution" name="rho_resolution" min="1" max="5" value="1" class="form-control-range" oninput="document.getElementById('rho-resolution-value').textContent = this.value">
+                <label for="theta-resolution">Theta Resolution: <span id="theta-resolution-value">1</span></label>
+                <input type="range" id="theta-resolution" name="theta_resolution" min="1" max="180" value="1" class="form-control-range" oninput="document.getElementById('theta-resolution-value').textContent = this.value">
+                <label for="num-peaks">Number of Lines: <span id="num-peaks-value">10</span></label>
+                <input type="number" id="num-peaks" name="num_peaks" min="1" max="200" value="10" class="form-control" oninput="document.getElementById('num-peaks-value').textContent = this.value">
             </div>
             <!-- Harris Corner Detection Parameters -->
             <div id="harris-parameters" class="form-group" style="display: none;">
