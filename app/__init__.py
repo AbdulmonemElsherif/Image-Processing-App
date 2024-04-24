@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 import secrets
 import time
-
+from .Canny import canny_edge_detector
 class UploadForm(FlaskForm):
     image = FileField('Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Only .jpg, .png, .jpeg, .gif formats are allowed!')])
 app = Flask(__name__)
@@ -58,8 +58,8 @@ def process(filename):
             canny_low_threshold = int(request.form.get('canny_low_threshold'))
             canny_high_threshold = int(request.form.get('canny_high_threshold'))
             canny_sigma = float(request.form.get('canny_sigma'))
-            blurred = cv2.GaussianBlur(img, (0, 0), canny_sigma)
-            edges = cv2.Canny(blurred, canny_low_threshold, canny_high_threshold)
+            canny_ksize = int(request.form.get('canny-kernel-size', '3'))  # '3' is the default value    
+            edges = canny_edge_detector(img, canny_sigma, canny_ksize, canny_low_threshold, canny_high_threshold)  # use the function
             cv2.imwrite(output_path, edges)
         elif operation == 'hough':
             hough_resolution = float(request.form.get('hough_resolution'))
