@@ -1,34 +1,87 @@
+#import cv2.cv2
 import numpy as np
 import cv2
+import math
+from numpy.lib import stride_tricks
+from matplotlib import pyplot as plt
 
-def HoughTransform(img, threshold, rho_resolution, theta_resolution, num_peaks):
-    # Convert image to grayscale
-    img_gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
 
-    # Apply Gaussian blur
-    img_blur = cv2.GaussianBlur(img_gray, (5, 5), 1.5)
+def HoughTransform (img, threshold):
 
-    # Apply Canny edge detection
-    edges = cv2.Canny(img_blur, threshold, threshold * 2)
+    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 
-    # Get edge coordinates
-    y_idxs, x_idxs = np.nonzero(edges)
+    #Finding The Edge points
+    edge=cv2.Canny(gray,50,100)
+    loc1, loc2 = np.where(edge != 0)
+    a = np.dstack((np.array(loc1), np.array(loc2)))
+    Edge_Coordinates = a[0]
 
-    # Calculate image diagonal
-    img_diagonal = np.ceil(np.sqrt(img.shape[0]**2 + img.shape[1]**2))
+    #Finding Dimensions of the image
+    height=edge.shape[0]
+    width=edge.shape[1]
 
-    # Create an array to accumulate values
-    accumulator = np.zeros((int(np.ceil(img_diagonal/rho_resolution)), int(np.ceil(180/theta_resolution))))
+    #Finding maximum rho value
+    #rho values range from -D to D
 
-    # Compute the Hough Transform
-    for i in range(len(x_idxs)):
-        for theta in np.arange(0, 180, theta_resolution):
-            rho = x_idxs[i]*np.cos(np.deg2rad(theta)) + y_idxs[i]*np.sin(np.deg2rad(theta))
-            accumulator[int(np.ceil(rho/rho_resolution)), int(np.ceil(theta/theta_resolution))] += 1
+    D=math.ceil(math.sqrt((width-1)**2+(height)**2))
 
-    # Find the 'num_peaks' strongest lines
-    peaks = np.argsort(accumulator.ravel())[-num_peaks:]
-    rho_values = (peaks // accumulator.shape[1]) * rho_resolution
-    theta_values = (peaks % accumulator.shape[1]) * theta_resolution
+    #Creating a hough Accumulator
+    ht=np.zeros((2*D+1,182))
 
-    return rho_values, theta_values
+    #rho values
+    s=np.arange(-D,D+1,+1)
+
+    #theta values range from -90 degrees to 90 degrees
+    #thetai is just a variable to store corresponding indices of theta
+    theta=np.arange(-90,91,1)
+    thetai=np.arange(0,181,1)
+
+    r=0
+
+    rr=0
+
+    for i in Edge_Coordinates:
+        y=0
+
+        #Rho values calculated by the formula: rho= x*cos(theta)+y*sin(theta)
+        r=(i[1]*np.cos(np.radians(theta))) + np.multiply(i[0], np.sin(np.radians(theta)))
+        rr=np.floor(r).astype('int')+D
+        #Voting
+        ht[rr,thetai]+=1
+
+    #Finding hough peaks based on threshold provided
+    r, t = np.where(ht > threshold)
+
+    return ht,r,t,theta,s
+
+
+
+def DrawHoughLines(img,r,t,theta,s):
+
+    w=np.dstack((np.array(r),np.array(t)))
+    win=w[0]
+
+    for i in win:
+
+        r=i[0]
+        t=i[1]
+        #d here is the rho and th is the theta
+        d=s[r]
+        th=math.radians(theta[t])
+
+        a = math.cos(th)
+        b = math.sin(th)
+        x0 = a * d
+        y0 = b * d
+        x1 = int(x0 + 1000 * (-b))
+        y1 = int(y0 + 1000 * (a))
+        x2 = int(x0 - 1000 * (-b))
+        y2 = int(y0 - 1000 * (a))
+        cv2.line(img,(x1,y1),(x2,y2),(0,255,0),2)
+
+    return img
+
+#150 here means that we are searching for lines where at least 150 points passes through it 
+ht,r,t,theta,s=HoughTransform(img,100)
+HoughLine=DrawHoughLines(img,r,t,theta,s)
+
