@@ -46,23 +46,28 @@
             </div>
             <!-- Hough Line Detection Parameters -->
             <div id="hough-parameters" class="form-group" style="display: none;">
-                <label for="rho-resolution">Rho Resolution: <span id="rho-resolution-value">1</span></label>
-                <input type="range" id="rho-resolution" name="rho_resolution" min="1" max="5" value="1" class="form-control-range" oninput="document.getElementById('rho-resolution-value').textContent = this.value">
+                <label for="canny-kernel-size">Kernel Size: <span id="hough-kernel-size-value">3</span></label>
+                <input type="range" id="hough-kernel-size" name="hough_kernel_size" min="3" max="7" step="1" value="3" class="form-control-range" oninput="document.getElementById('hough-kernel-size-value').textContent = this.value">
+                <label for="hough-low-threshold">Canny Low Threshold: <span id="hough-low-threshold-value">100</span></label>
+                <input type="range" id="hough-low-threshold" name="hough_low_threshold" min="1" max="150" value="100" class="form-control-range" oninput="document.getElementById('hough-low-threshold-value').textContent = this.value">
+                <label for="hough-high-threshold">Canny High Threshold: <span id="hough-high-threshold-value">200</span></label>
+                <input type="range" id="hough-high-threshold" name="hough_high_threshold" min="50" max="255" value="200" class="form-control-range" oninput="document.getElementById('hough-high-threshold-value').textContent = this.value">
+                <label for="hough-sigma">Sigma: <span id="hough-sigma-value">1.0</span></label>
+                <input type="range" id="hough-sigma" name="hough_sigma" min="0.1" max="6" step="0.1" value="1.0" class="form-control-range" oninput="document.getElementById('hough-sigma-value').textContent = this.value">
                 <label for="theta-resolution">Theta Resolution: <span id="theta-resolution-value">1</span></label>
                 <input type="range" id="theta-resolution" name="theta_resolution" min="1" max="180" value="1" class="form-control-range" oninput="document.getElementById('theta-resolution-value').textContent = this.value">
-                <label for="num-peaks">Number of Lines: <span id="num-peaks-value">10</span></label>
-                <input type="number" id="num-peaks" name="num_peaks" min="1" max="200" value="10" class="form-control" oninput="document.getElementById('num-peaks-value').textContent = this.value">
+                <label for="num-peaks">Voting Threshold <span id="num-peaks-value">100</span></label>
+                <input type="number" id="num-peaks" name="num_peaks" min="50" max="300" value="100" class="form-control" oninput="document.getElementById('num-peaks-value').textContent = this.value">
             </div>
             <!-- Harris Corner Detection Parameters -->
             <div id="harris-parameters" class="form-group" style="display: none;">
                 <label for="harris-threshold">Threshold: <span id="harris-threshold-value">0.04</span></label>
-                <input type="range" id="harris-threshold" name="harris_threshold" min="0.01" max="0.1" step="0.01" value="0.04" class="form-control-range" oninput="document.getElementById('harris-threshold-value').textContent = this.value">
+                <input type="range" id="harris-threshold" name="harris_threshold" min="0.01" max="1" step="0.01" value="0.1" class="form-control-range" oninput="document.getElementById('harris-threshold-value').textContent = this.value">
             </div>
             <button type="submit" class="btn btn-primary">Process</button>
         </form>
     </div>
     <script>
-        // JavaScript to toggle visibility of parameter inputs based on selected operation
         document.getElementById('operation').addEventListener('change', function() {
             var operation = this.value;
             document.getElementById('canny-parameters').style.display = (operation === 'canny') ? 'block' : 'none';

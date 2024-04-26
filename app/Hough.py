@@ -2,54 +2,47 @@ import cv2 as cv
 import numpy as np
 import math
 
-def hough_line_transform(img, rho_resolution=1, theta_resolution= np.pi / 180, threshold= 150):
-    # Check if image is loaded fine
+from .Canny import canny_edge_detector
+
+def hough_line_transform(img, theta_resolution=np.pi / 180, threshold=150, lowerThreshold=50, upperThreshold=200, ksize=3, sigma = 3):
     if img is None:
         print('Error: Image is None')
         return None
 
-    dst = cv.Canny(img, 50, 200, None, 3)
+    edges = canny_edge_detector(img, sigma, ksize ,lowerThreshold, upperThreshold)
 
-    # Copy edges to the image that will display the results in BGR
-    cdst = cv.cvtColor(dst, cv.COLOR_GRAY2BGR)
+    img_height, img_width = img.shape[:2]
+  
+    diag_len = int(math.sqrt(np.square(img_height) + np.square(img_width)))
 
-    # Calculate the maximum possible rho value
-    max_rho = int(math.sqrt(img.shape[0]**2 + img.shape[1]**2))
+    accumulator = np.zeros((2 * diag_len, int(np.pi / theta_resolution)), dtype=np.uint32)
 
-    # Initialize accumulator array
-    accumulator = np.zeros((2 * max_rho, int(np.pi / theta_resolution)), dtype=np.uint32)
-
-    # Perform Hough Transform
     for y in range(img.shape[0]):
         for x in range(img.shape[1]):
-            if dst[y, x] != 0:
+            if edges[y, x] != 0:  # If pixel is part of an edge
                 for theta_index in range(accumulator.shape[1]):
                     theta = theta_index * theta_resolution
-                    rho = int((x * math.cos(theta) + y * math.sin(theta)) / rho_resolution)    
-                    accumulator[rho + max_rho, theta_index] += 1
+                    rho = int((x * math.cos(theta) + y * math.sin(theta)))
+                    accumulator[rho + diag_len, theta_index] += 1
 
-    # Find lines with votes above threshold
     lines = []
     for rho_index in range(accumulator.shape[0]):
         for theta_index in range(accumulator.shape[1]):
             if accumulator[rho_index, theta_index] > threshold:
-                rho = rho_index - max_rho
+                rho = rho_index - diag_len
                 theta = theta_index * theta_resolution
                 lines.append((rho, theta))
-
-    # Draw the detected lines
+    edges_uint8 = cv.convertScaleAbs(edges)
+    result = cv.cvtColor(edges_uint8, cv.COLOR_GRAY2BGR)
     for line in lines:
         rho, theta = line
         a = math.cos(theta)
         b = math.sin(theta)
         x0 = a * rho
         y0 = b * rho
-        pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
-        pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
-        cv.line(cdst, pt1, pt2, (0, 0, 255), 3, cv.LINE_AA)
+        pt1 = (int(x0 + 1000 * (-b)), int(y0 + 1000 * (a)))
+        pt2 = (int(x0 - 1000 * (-b)), int(y0 - 1000 * (a)))
+        cv.line(result, pt1, pt2, (0, 0, 255), 3, cv.LINE_AA)
 
-    return cdst
+    return result
 
-# Example usage
-# img = cv.imread('your_image_path.jpg', cv.IMREAD_GRAYSCALE)
-# hough_line_transform_manual(img, rho_resolution=1, theta_resolution=np.pi/180, threshold=150)

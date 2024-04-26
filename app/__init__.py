@@ -69,10 +69,13 @@ def process(filename):
             edges = canny_edge_detector(img, canny_sigma, canny_ksize, canny_low_threshold, canny_high_threshold)
             cv2.imwrite(output_path, edges)
         elif operation == 'hough':
-            rho_resolution = int(request.form.get('rho_resolution'))
-            theta_resolution = float(request.form.get('theta_resolution'))
-            num_peaks = int(request.form.get('num_peaks'))
-            hough_line_img = hough_line_transform(img, rho_resolution, (np.pi / 180) * theta_resolution, num_peaks)
+            theta_resolution = int(request.form.get('theta_resolution'))
+            Hough_threshold = int(request.form.get('num_peaks'))
+            hough_low_threshold = int(request.form.get('hough_low_threshold'))
+            hough_high_threshold = int(request.form.get('hough_high_threshold'))
+            hough_ksize = int(request.form.get('hough-kernel-size', '3')) 
+            hough_sigma = float(request.form.get('hough_sigma'))
+            hough_line_img = hough_line_transform(img, (np.pi/180) * theta_resolution, Hough_threshold, hough_low_threshold, hough_high_threshold, hough_ksize, hough_sigma)
             cv2.imwrite(output_path, hough_line_img)  # Save color image
         elif operation == 'harris':
             harris_threshold = float(request.form.get('harris_threshold', '0.01'))
@@ -95,23 +98,16 @@ def process(filename):
 
 @app.route('/processed/<filename>')
 def processed(filename):
-    # Construct the relative file path
     file_path = os.path.join(app.config['PROCESSED_FOLDER'], filename)
 
-    # Print the list of files in the processed folder
     print("Files in processed folder: ", os.listdir(app.config['PROCESSED_FOLDER']))
 
-    # Print the relative file path
     print("Relative file path: ", file_path)
 
-    # Check if the file exists
     if not os.path.isfile(file_path):
         return "File not found. Please wait a moment and refresh the page."
 
-    # Convert the relative path to an absolute path
     absolute_file_path = os.path.abspath(file_path)
-
-    # Send the file
     return send_file(absolute_file_path)
 
 if __name__ == '__main__':
