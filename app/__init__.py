@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory,send_file
+from flask import Flask, flash, render_template, request, redirect, url_for, send_from_directory,send_file
 from werkzeug.utils import secure_filename
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
@@ -27,11 +27,14 @@ def home():
     if request.method == 'POST':
         if form.validate_on_submit():
             file = form.image.data
-            filename = secure_filename(file.filename)
-            upload_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            os.makedirs(os.path.dirname(upload_path), exist_ok=True)
-            file.save(upload_path)
-            return redirect(url_for('process', filename=filename))
+            if file:
+                filename = secure_filename(file.filename)
+                upload_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                os.makedirs(os.path.dirname(upload_path), exist_ok=True)
+                file.save(upload_path)
+                return redirect(url_for('process', filename=filename))
+            else:
+                flash('Please select an image first.', 'error')
     return render_template('index.html', form=form)
 
 @app.route('/upload', methods=['GET', 'POST'])
