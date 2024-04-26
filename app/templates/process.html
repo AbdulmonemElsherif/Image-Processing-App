@@ -10,16 +10,22 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center my-4">Process Image</h1>
-        <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Uploaded image" class="img-fluid">
-        <form method="POST">
-            <div class="form-group">
-                <label for="operation">Select Operation:</label>
-                <select name="operation" id="operation" class="form-control">
-                    <option value="canny">Canny edge detection</option>
-                    <option value="hough">Hough line detection</option>
-                    <option value="harris">Harris corner detection</option>
-                </select>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card mt-5">
+                    <div class="card-header">
+                        <h3 class="text-center">Process Image</h3>
+                    </div>
+                    <div class="card-body">
+                        <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Uploaded image" class="img-fluid mb-3">
+                        <form method="POST">
+                            <div class="form-group">
+                                <label for="operation">Select Operation:</label>
+                                <select name="operation" id="operation" class="form-control">
+                                    <option value="canny">Canny edge detection</option>
+                                    <option value="hough">Hough line detection</option>
+                                    <option value="harris">Harris corner detection</option>
+                                </select>
             </div>
             <!-- Canny Edge Detection Parameters -->
             <div id="canny-parameters" class="form-group">

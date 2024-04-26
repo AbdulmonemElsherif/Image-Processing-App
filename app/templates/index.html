@@ -8,20 +8,34 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="my-4">Welcome to the Image Processing App</h1>
-        <h3 class="my-4">Upload an image</h3>
-        <!-- index.html -->
-        <form method="POST" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-            <p>
-                {{ form.image.label }}<br>
-                {{ form.image(size=32) }}<br>
-                {% for error in form.image.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-            </p>
-            <p><input type="submit" value="Upload"></p>
-        </form>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card mt-5">
+                    <div class="card-header">
+                        <h3>Welcome to the Image Processing App</h3>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Upload an image</h5>
+                        <!-- index.html -->
+                        <form method="POST" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                {{ form.image.label(class="form-label") }}
+                                {{ form.image(class="form-control-file") }}
+                                {% for error in form.image.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    {{ error }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Upload" class="btn btn-primary">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

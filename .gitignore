@@ -1,3 +1,5 @@
 /app/static/processed
 /app/static/uploads
 venv/
+*.pyc
+__pycache__/
