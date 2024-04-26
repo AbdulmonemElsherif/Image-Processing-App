@@ -10,6 +10,7 @@ import secrets
 import time
 from .Canny import canny_edge_detector
 from .Hough import hough_line_transform
+from .Harris import harris_corner_detector
 
 class UploadForm(FlaskForm):
     image = FileField('Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'webp'], 'Only .jpg, .png, .jpeg, .webp formats are allowed!')])
@@ -71,12 +72,20 @@ def process(filename):
             hough_line_img = hough_line_transform(img, rho_resolution, (np.pi / 180) * theta_resolution, num_peaks)
             cv2.imwrite(output_path, hough_line_img)  # Save color image
         elif operation == 'harris':
-            harris_threshold = float(request.form.get('harris_threshold'))
-            img = np.float32(img)
-            dst = cv2.cornerHarris(img, 2, 3, 0.04)
-            img[dst > harris_threshold * dst.max()] = 255
-            cv2.imwrite(output_path, img)
+            harris_threshold = float(request.form.get('harris_threshold', '0.01'))
 
+            # Convert image to float32 for processing
+            img_float = np.float32(img)
+            corners = harris_corner_detector(img_float, 3, 0.04, harris_threshold)
+            
+            # Convert grayscale image back to color
+            img_color = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+            
+            # Visualize corners
+            for y, x in zip(*corners):
+                cv2.circle(img_color, (x, y), 2, (0,0,255), 1)
+            
+            cv2.imwrite(output_path, img_color)
         return redirect(url_for('processed', filename=filename))
 
     return render_template('process.html', filename=filename)
