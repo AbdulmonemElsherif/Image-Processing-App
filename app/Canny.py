@@ -1,10 +1,6 @@
 import cv2
 import numpy as np
 
-def canny_edge_detection(img, low_threshold, high_threshold, sigma):
-    blurred = cv2.GaussianBlur(img, (0, 0), sigma)
-    edges = cv2.Canny(blurred, low_threshold, high_threshold)
-    return edges
 
 def to_grey(img: np.ndarray):
     if len(img.shape) == 3:
@@ -82,7 +78,7 @@ def non_max_suppression(g: np.ndarray, theta: np.ndarray):
     neigbourPixel1, neigbourPixel2 = g[x-1, y+1], g[x+1, y-1]
    elif 67.5 <= angle[x, y] < 112.5:
     neigbourPixel1, neigbourPixel2 = g[x-1, y], g[x+1, y]
-   elif 67.5 <= angle[x, y] < 112.5:
+   elif 112.5 <= angle[x, y] < 157.5:  
     neigbourPixel1, neigbourPixel2 = g[x+1, y+1], g[x-1, y-1]
    else:
     neigbourPixel1, neigbourPixel2 = g[x, y-1], g[x, y+1]

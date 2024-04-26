@@ -1,5 +1,5 @@
 /app/static/processed
 /app/static/uploads
+/app/**/*.pyc
+/app/**/__pycache__/
 venv/
-*.pyc
-__pycache__/
