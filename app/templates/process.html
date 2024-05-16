@@ -37,8 +37,8 @@
             <div id="canny-parameters" class="form-group">
                 <label for="canny-kernel-size">Kernel Size: <span id="canny-kernel-size-value">3</span></label>
                 <input type="range" id="canny-kernel-size" name="canny_kernel_size" min="3" max="7" step="1" value="3" class="form-control-range" oninput="document.getElementById('canny-kernel-size-value').textContent = this.value">
-                <label for="canny-low-threshold">Low Threshold: <span id="canny-low-threshold-value">100</span></label>
-                <input type="range" id="canny-low-threshold" name="canny_low_threshold" min="1" max="150" value="100" class="form-control-range" oninput="document.getElementById('canny-low-threshold-value').textContent = this.value">
+                <label for="canny-low-threshold">Low Threshold: <span id="canny-low-threshold-value">50</span></label>
+                <input type="range" id="canny-low-threshold" name="canny_low_threshold" min="1" max="150" value="50" class="form-control-range" oninput="document.getElementById('canny-low-threshold-value').textContent = this.value">
                 <label for="canny-high-threshold">High Threshold: <span id="canny-high-threshold-value">200</span></label>
                 <input type="range" id="canny-high-threshold" name="canny_high_threshold" min="50" max="255" value="200" class="form-control-range" oninput="document.getElementById('canny-high-threshold-value').textContent = this.value">
                 <label for="canny-sigma">Sigma: <span id="canny-sigma-value">1.0</span></label>
@@ -48,8 +48,8 @@
             <div id="hough-parameters" class="form-group" style="display: none;">
                 <label for="canny-kernel-size">Kernel Size: <span id="hough-kernel-size-value">3</span></label>
                 <input type="range" id="hough-kernel-size" name="hough_kernel_size" min="3" max="7" step="1" value="3" class="form-control-range" oninput="document.getElementById('hough-kernel-size-value').textContent = this.value">
-                <label for="hough-low-threshold">Canny Low Threshold: <span id="hough-low-threshold-value">100</span></label>
-                <input type="range" id="hough-low-threshold" name="hough_low_threshold" min="1" max="150" value="100" class="form-control-range" oninput="document.getElementById('hough-low-threshold-value').textContent = this.value">
+                <label for="hough-low-threshold">Canny Low Threshold: <span id="hough-low-threshold-value">50</span></label>
+                <input type="range" id="hough-low-threshold" name="hough_low_threshold" min="1" max="150" value="50" class="form-control-range" oninput="document.getElementById('hough-low-threshold-value').textContent = this.value">
                 <label for="hough-high-threshold">Canny High Threshold: <span id="hough-high-threshold-value">200</span></label>
                 <input type="range" id="hough-high-threshold" name="hough_high_threshold" min="50" max="255" value="200" class="form-control-range" oninput="document.getElementById('hough-high-threshold-value').textContent = this.value">
                 <label for="hough-sigma">Sigma: <span id="hough-sigma-value">1.0</span></label>

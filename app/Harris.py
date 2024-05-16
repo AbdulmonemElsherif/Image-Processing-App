@@ -15,7 +15,6 @@ def compute_structure_tensor(sobelx, sobely, window_size=3):
     Ixy = sobelx*sobely
     Iyy = sobely**2
     
-
     kernel = cv2.getGaussianKernel(window_size, -1)
     Sxx = cv2.filter2D(Ixx, -1, kernel)
     Sxy = cv2.filter2D(Ixy, -1, kernel)

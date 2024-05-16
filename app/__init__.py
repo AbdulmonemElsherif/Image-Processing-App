@@ -75,6 +75,7 @@ def process(filename):
             hough_high_threshold = int(request.form.get('hough_high_threshold'))
             hough_ksize = int(request.form.get('hough-kernel-size', '3')) 
             hough_sigma = float(request.form.get('hough_sigma'))
+            # hough_line_img = hough_line_transform(img, (np.pi/180) * theta_resolution, Hough_threshold, hough_low_threshold, hough_high_threshold, hough_ksize, hough_sigma)
             hough_line_img = hough_line_transform(img, (np.pi/180) * theta_resolution, Hough_threshold, hough_low_threshold, hough_high_threshold, hough_ksize, hough_sigma)
             cv2.imwrite(output_path, hough_line_img)  # Save color image
         elif operation == 'harris':

@@ -9,7 +9,7 @@ def hough_line_transform(img, theta_resolution=np.pi / 180, threshold=150, lower
         print('Error: Image is None')
         return None
 
-    edges = canny_edge_detector(img, sigma, ksize ,lowerThreshold, upperThreshold)
+    edges = cv.Canny(img, lowerThreshold, upperThreshold ,None, ksize)
 
     img_height, img_width = img.shape[:2]
   
@@ -32,6 +32,8 @@ def hough_line_transform(img, theta_resolution=np.pi / 180, threshold=150, lower
                 rho = rho_index - diag_len
                 theta = theta_index * theta_resolution
                 lines.append((rho, theta))
+
+
     edges_uint8 = cv.convertScaleAbs(edges)
     result = cv.cvtColor(edges_uint8, cv.COLOR_GRAY2BGR)
     for line in lines:
