@@ -20,7 +20,7 @@ pca = PCA(n_components=n_components)
 eigenfaces = pca.fit_transform(X_centered)
 
 # Reconstruct a face using k components
-k_values = [5, 10, 30]  # Example: 5, 10, 30 components
+k_values = [10, 15, 60]  # Example: 5, 10, 30 components
 for k in k_values:
     pca_k = PCA(n_components=k)
     X_k = pca_k.fit_transform(X_centered)
