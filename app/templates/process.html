@@ -67,20 +67,12 @@
             </div>
             <!-- Hough Ellipse Detection Parameters -->
             <div id="hough-ellipse-parameters" class="form-group" style="display: none;">
-                <label for="hough-ellipse-min-size">Min Size: <span id="hough-ellipse-min-size-value">100</span></label>
-                <input type="range" id="hough-ellipse-min-size" name="hough_ellipse_min_size" min="1" max="500" value="100" class="form-control-range" oninput="document.getElementById('hough-ellipse-min-size-value').textContent = this.value">
-                <label for="hough-ellipse-max-size">Max Size: <span id="hough-ellipse-max-size-value">120</span></label>
-                <input type="range" id="hough-ellipse-max-size" name="hough_ellipse_max_size" min="1" max="500" value="120" class="form-control-range" oninput="document.getElementById('hough-ellipse-max-size-value').textContent = this.value">
-                <label for="hough-ellipse-accuracy">Accuracy:</label>
-                <input type="number" id="hough-ellipse-accuracy" name="hough_ellipse_accuracy" min="1" max="100" value="50" class="form-control">
-                <label for="hough-ellipse-threshold">Threshold:</label>
-                <input type="number" id="hough-ellipse-threshold" name="hough_ellipse_threshold" min="1" max="500" value="230" class="form-control">
                 <label for="hough-ellipse-sigma">Sigma:</label>
-                <input type="number" id="hough-ellipse-sigma" name="hough_ellipse_sigma" min="0.1" max="10" step="0.1" value="2.0" class="form-control">
+                <input type="number" id="hough-ellipse-sigma" name="hough_ellipse_sigma" min="0.1" max="10" step="0.1" value="4.0" class="form-control">
                 <label for="hough-ellipse-low-threshold">Low Threshold:</label>
-                <input type="number" id="hough-ellipse-low-threshold" name="hough_ellipse_low_threshold" min="0" max="1" step="0.01" value="0.55" class="form-control">
+                <input type="number" id="hough-ellipse-low-threshold" name="hough_ellipse_low_threshold" min="0" max="150" step="1" value="20" class="form-control">
                 <label for="hough-ellipse-high-threshold">High Threshold:</label>
-                <input type="number" id="hough-ellipse-high-threshold" name="hough_ellipse_high_threshold" min="0" max="1" step="0.01" value="0.8" class="form-control">
+                <input type="number" id="hough-ellipse-high-threshold" name="hough_ellipse_high_threshold" min="20" max="250" step="1" value="50" class="form-control">
             </div>
             <button type="submit" class="btn btn-primary">Process</button>
         </form>

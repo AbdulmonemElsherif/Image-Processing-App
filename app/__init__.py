@@ -11,7 +11,7 @@ import time
 from .Canny import canny_edge_detector
 from .Hough import hough_line_transform
 from .Harris import harris_corner_detector
-from .Hough_ellipse import hough_ellipse_transform
+from .Hough_ellipse import randomized_hough_ellipse_transform
 
 class UploadForm(FlaskForm):
     image = FileField('Image', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'webp'], 'Only .jpg, .png, .jpeg, .webp formats are allowed!')])
@@ -96,19 +96,18 @@ def process(filename):
             cv2.imwrite(output_path, img_color)
         elif operation == 'hough-ellipse':
             print("Entered 'hough-ellipse' operation")  # Debugging line
-            min_size = int(request.form.get('hough_ellipse_min_size'))
-            max_size = int(request.form.get('hough_ellipse_max_size'))
-            accuracy = int(request.form.get('hough_ellipse_accuracy', 20))  # default value is 20
-            threshold = int(request.form.get('hough_ellipse_threshold', 250))  # default value is 250
-            sigma = float(request.form.get('hough_ellipse_sigma', 2.0))  # default value is 2.0
-            low_threshold = float(request.form.get('hough_ellipse_low_threshold', 0.55))  # default value is 0.55
-            high_threshold = float(request.form.get('hough_ellipse_high_threshold', 0.8))  # default value is 0.8
-            print(f"Parameters: min_size={min_size}, max_size={max_size}, accuracy={accuracy}, threshold={threshold}, sigma={sigma}, low_threshold={low_threshold}, high_threshold={high_threshold}")  # Debugging line
+            sigma = float(request.form.get('hough_ellipse_sigma', 4))  # default value is 2.0
+            low_threshold = float(request.form.get('hough_ellipse_low_threshold', 20))  # default value is 0.55
+            high_threshold = float(request.form.get('hough_ellipse_high_threshold', 50))  # default value is 0.8
             # Assuming you have a function hough_ellipse_transform for ellipse detection
             print("Calling hough_ellipse_transform...")  # Debugging line
-            ellipse_img = hough_ellipse_transform(img, min_size, max_size, accuracy, threshold, sigma, low_threshold, high_threshold)
+            ellipse_img = randomized_hough_ellipse_transform(img, canny_t1= low_threshold,
+            canny_t2= high_threshold, canny_sigma= sigma)
             print("hough_ellipse_transform completed")  # Debugging line
-            cv2.imwrite(output_path, ellipse_img)
+            p, q, a, b, angle, score = ellipse_img
+            img_copy = img.copy()
+            final_img = cv2.ellipse(img_copy, (int(p), int(q)), (int(a), int(b)), angle * 180 / np.pi, 0, 360, color=(0, 255, 0), thickness=2)
+            cv2.imwrite(output_path, final_img)
             print(f"Image written to {output_path}")  # Debugging line
         return redirect(url_for('processed', filename=filename))
 
