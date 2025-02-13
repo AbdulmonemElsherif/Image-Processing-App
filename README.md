@@ -1,6 +1,13 @@
 # Image Processing Application
 
-This is a simple Flask application for image processing.
+This is a Flask-based web application that allows users to upload images and apply various image processing techniques. The application provides real-time visualization of different filters and algorithms, including:
+
+1. Canny Edge Detection
+2. Hough Line Transformation
+3. Harris Corner Detection
+4. Hough Ellipse Detection
+
+Built with Python, Flask, and OpenCV, this project is designed to help users analyze images interactively.
 
 ## Installation
 
@@ -21,6 +28,10 @@ This is a simple Flask application for image processing.
 - Flask
 - Flask-WTF
 - Pillow
+
+## Application video
+
+https://github.com/user-attachments/assets/180f50ca-698f-4391-b5f8-ce99d6a8fd4c
 
 ## License
 
