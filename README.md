@@ -31,7 +31,7 @@ Built with Python, Flask, and OpenCV, this project is designed to help users ana
 
 ## Application video
 
-https://github.com/user-attachments/assets/180f50ca-698f-4391-b5f8-ce99d6a8fd4c
+https://github.com/user-attachments/assets/3b3c121a-983e-4af1-b718-3b2a618985e8
 
 ## License
 
